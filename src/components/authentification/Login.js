@@ -20,7 +20,7 @@ function Login(props) {
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const { setAuthTokens,authTokens,setAuthUsers,authUsers,setAuthRole,authRole } = useAuth();
-  const [referer,setReferer] = useState("admin/dashboard");
+  const [referer,setReferer] = useState("admin/home");
 
   useEffect(() => {
 
@@ -41,6 +41,7 @@ function Login(props) {
         if (result.status === 200) {
           setAuthTokens(result.data.token);
           setAuthRole(result.data.role);
+          setAuthUsers(result.data.user);
           setLoggedIn(true);
         } else {
           setIsError(true);

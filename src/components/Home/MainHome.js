@@ -61,8 +61,12 @@ function MainHome(props) {
               fluid
               icon="users"
               iconPosition="left"
-              placeholder="Entre 25 et 55"
+              placeholder="Entre 20 et 55"
+              type='number'
+              min="20"
+              max="55"
               onChange={onChangeAge}
+              required
             />
            
             <Button as={Link} to={`/search/${startDate}/${endDate}/${age}`} color="teal" fluid size="large">

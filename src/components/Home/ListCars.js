@@ -65,7 +65,7 @@ function ListCars(props) {
 
   return (
 
-    <Container fluid style={{ marginTop: '5em' }}>
+    <Container style={{ marginTop: '5em' }}>
 
       <Form size="large" >
         <Grid style={{ height: "100vh" }} doubling stackable >
@@ -80,16 +80,17 @@ function ListCars(props) {
                 
                 <Grid.Column  >
                   
-                  <Segment stacked >
-                    <Header as="h2" color="teal" >
+                  <Segment stacked textAlign='left'>
+                    <Label ribbon color="teal" >{car.categories.nom_categorie}</Label>
+                    <Header as="h1" color="teal" textAlign='center'>
                       {car.marque} {car.modele}
                     </Header>
-                    <Label style={{ marginBottom: '1rem' }} color="teal" >{car.categories.nom_categorie}</Label>
-                    <Image src='https://picsum.photos/200' style={{ width: "100vh" }} />
+                    
+                    <Image src={`http://localhost:8000${car.image}`} style={{ width: "100vh" }} />
 
 
                     <Header as="h3" textAlign='center' color="grey">Carburant</Header>
-                    <div >
+                    <Container textAlign='center'>
                       {/* {specs.map((spec) => (
                         <Popup Fluid
                           content={spec.info}
@@ -125,9 +126,9 @@ function ListCars(props) {
                         trigger={<Icon color='teal' size='big' style={{ backgroundColor: `${car.couleur}` }}
                         />}
                       />
-                    </div>
+                    </Container>
 
-                    <Header>{car.cout_par_jour}dh Par Jour</Header>
+                    <Header textAlign='center'>{car.cout_par_jour}dh Par Jour</Header>
                     <Button as={Link} to={`/reservation/${car.id}`} fluid color="teal" textAlign='right' size="large">
                       RESERVER
                     </Button>

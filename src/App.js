@@ -15,6 +15,8 @@ import Reservation from './components/Reservation/Reservation';
 import { Grid, Header } from "semantic-ui-react";
 import Account from "./components/user/Account";
 import Profile from "./components/user/Profile";
+import UserDashbord from "./components/admin/UserDashboard";
+import CategoryDashboard from "./components/admin/CategoryDashboard";
 
 
 function App() {
@@ -57,8 +59,10 @@ function App() {
             <Route path="/register" component={Register} />
             <PrivateRoute path="/account" component={Account} />
             <PrivateRoute path="/Profile" component={Profile} />
-            <AdminRoute path="/admin/" component={AdminPage} />
-
+            <AdminRoute path="/admin" component={AdminPage} />
+            {/* <AdminRoute path="/admin/home" component={AdminPage} />
+            <AdminRoute path="/admin/users" component={UserDashbord} />
+            <AdminRoute path="/admin/categories" component={CategoryDashboard} /> */}
             <Route path="*" component={() =>(
               <Grid textAlign="center" style={{ margin: '0rem',height: "100vh",backgroundSize: 'cover',BackgroundPosition: 'center'}} verticalAlign="middle">
                 <Grid.Column style={{ maxWidth: 450 }} >

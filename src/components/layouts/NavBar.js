@@ -7,7 +7,7 @@ import axios from 'axios';
 
 
 function NavBar() {
-  const { setAuthTokens, authTokens, setAuthUsers, authUsers } = useAuth();
+  const { setAuthTokens, authTokens, setAuthUsers, authUsers,authRole } = useAuth();
 
   function logOut() {
     setAuthTokens("");
@@ -36,7 +36,7 @@ function NavBar() {
   return (
     <div>
       {console.log(authUsers)}
-      <Menu size='huge'  borderless fixed='top'>
+      <Menu size='huge'  borderless fixed='top' inverted color='teal'>
         <Container fluid>
           <Menu.Item as={Link} to="/" header>
             <Image
@@ -57,6 +57,7 @@ function NavBar() {
 
 
                   <Dropdown.Menu>
+                    {authRole == 'admin' ? (<Dropdown.Item icon='th' text='Dashboard' as={Link} to="/admin/home"/>):''}
                     <Dropdown.Item icon='user' text='Account' as={Link} to="/account"/>
                     <Dropdown.Item icon='settings' text='Profile' as={Link} to="/profile"/>
                     <Dropdown.Item icon='sign out' text='logout' onClick={logOut} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Form, Grid, Header, Segment, Accordion, Menu } from "semantic-ui-react";
+import { Button, Form, Grid, Header, Segment, Accordion, Menu, Rail, Sticky, Ref } from "semantic-ui-react";
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios'
 
@@ -47,15 +47,15 @@ function FilterCars() {
 
 
     return (
-        <Grid.Column width={4} >
-            
-            <Form size="large" >
+        <Grid.Column width={4}>
+                      
+            <Form size="large">
                 <Segment inverted color='teal'>
                     <Header as="h2" textAlign="center">
                         Filtrer vos résultats
             </Header>
                 </Segment>
-                <Segment stacked textAlign="left">
+                <Segment stacked textAlign="left" >
                     <Accordion as={Menu} vertical size="huge" style={{ width: "100vh"}}>
                     <Menu.Item>
                             <Accordion.Title
@@ -99,6 +99,8 @@ function FilterCars() {
                     </Accordion>
                 </Segment>
             </Form>
+
+            
         </Grid.Column>
     )
 }
