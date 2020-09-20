@@ -14,7 +14,6 @@ function CategoryModal(props) {
     const [age_min, setAge] = useState("");
     const [annee_permis_min, setAnnee] = useState("");
     
-  
     useEffect(() => {
       if (open !== props.toggle) {
         setOpen(props.toggle);
@@ -38,6 +37,7 @@ function CategoryModal(props) {
     const postData = () => {
       let url;
       let methode;
+      let msg;
   
       const data = {
           'nom_categorie' : nom_categorie,
@@ -45,16 +45,18 @@ function CategoryModal(props) {
           'annee_permis_min' : annee_permis_min,
       }
   
-  
+      
       if(props.action === 'add'){
   
           url = "http://127.0.0.1:8000/api/categorie";
           methode='POST';
+          msg = "l' ajoute est réussie";
   
       }else{
   
           url = "http://127.0.0.1:8000/api/categorie/"+id;
           methode='PUT';
+          msg = 'la modification est réussie';
       }
   
       console.log(data);
@@ -70,8 +72,10 @@ function CategoryModal(props) {
       })
         .then((res) => {
           console.log(res.data);
-          alert('done');
+          props.refreshHandle(props.action,res.data);
+          props.notif(msg,'success');
           closeModal();
+          
         })
         .catch((err) => {
           console.log(err);
@@ -151,8 +155,8 @@ function CategoryModal(props) {
             Close
           </Button>
           {props.action == "edit" ? (
-            <Button onClick={() => postData()} color="orange">
-              valider modification
+            <Button onClick={() => postData()} color="green">
+              Enregistrer
             </Button>
           ) : (
             ""

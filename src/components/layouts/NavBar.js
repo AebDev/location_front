@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Dropdown, Image, Menu, Button, Icon, Grid } from "semantic-ui-react";
+import { Container, Dropdown, Image, Menu, Button, Icon, Grid, Header } from "semantic-ui-react";
 import { useAuth } from "../../context/auth";
 import axios from 'axios';
 
@@ -15,6 +15,9 @@ function NavBar() {
   }
 
   useEffect(() => {
+    if(authUsers === 'undefined'){
+      logOut();
+    }
     async function fetchData() {
       const result = await axios.get("http://127.0.0.1:8000/api/user", {
         headers: {
@@ -32,10 +35,9 @@ function NavBar() {
     
   }, []);
 
-
   return (
+    
     <div>
-      {console.log(authUsers)}
       <Menu size='huge'  borderless fixed='top' inverted color='teal'>
         <Container fluid>
           <Menu.Item as={Link} to="/" header>
@@ -44,7 +46,7 @@ function NavBar() {
               src={process.env.PUBLIC_URL + "/image/logo.png"}
               style={{ marginRight: "1.5em" }}
             />
-            Location Voiture
+            Location
           </Menu.Item>
 
           {
@@ -52,13 +54,13 @@ function NavBar() {
 
               <Menu.Menu position="right">
 
-                <Dropdown size='big' item trigger={<span> <Icon color='teal' name="user circle" size='big' /></span>} icon={null}>
+                <Dropdown  size='big' item trigger={<span> <Icon name="user circle" size='big' /></span>} icon={null} >
 
 
-
-                  <Dropdown.Menu>
+                  <Dropdown.Menu >
+                  <Dropdown.Item text={'Bonjour '+ (authUsers ? authUsers.nom : '') }  />
                     {authRole == 'admin' ? (<Dropdown.Item icon='th' text='Dashboard' as={Link} to="/admin/home"/>):''}
-                    <Dropdown.Item icon='user' text='Account' as={Link} to="/account"/>
+                    <Dropdown.Item icon='clipboard' text='Reservation' as={Link} to="/account"/>
                     <Dropdown.Item icon='settings' text='Profile' as={Link} to="/profile"/>
                     <Dropdown.Item icon='sign out' text='logout' onClick={logOut} />
 
@@ -68,11 +70,11 @@ function NavBar() {
 
                 <Menu.Menu position="right">
                   <Menu.Item >
-                    <Button basic color='teal' as={Link} to="/login">Login</Button>
+                    <Button basic inverted as={Link} to="/login">Login</Button>
                   </Menu.Item>
 
                   <Menu.Item >
-                    <Button color='teal' as={Link} to="/register">Register</Button>
+                    <Button inverted as={Link} to="/register">Register</Button>
                   </Menu.Item>
 
                 </Menu.Menu>)

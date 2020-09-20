@@ -10,7 +10,7 @@ import LoaderCss from "../loader/LoaderCss";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 
-const UserItems = ({items, loading}) => {
+const UserItems = ({items, loading, notif, refreshHandle}) => {
   
     const { authTokens } = useAuth();
 
@@ -66,7 +66,7 @@ const UserItems = ({items, loading}) => {
 
         if(deleteList.length === 0){
           
-          alert('sir tl3ab');
+          notif('selectionner les elements à supprimer','error');
         }
         else{
 
@@ -81,8 +81,8 @@ const UserItems = ({items, loading}) => {
           })
             .then((res) => {
               console.log(res.data);
-      
-              alert('done');
+              refreshHandle('delete',deleteList);
+              notif('la suppression est réussie','success');
       
             })
             .catch((err) => {
@@ -93,7 +93,7 @@ const UserItems = ({items, loading}) => {
       
     if(loading){
         return (
-          <div style={{margin:'0 auto'}}>
+          <div style={{margin:'0 auto',width:'100%'}}>
             <LoaderCss />
           </div>
         );
@@ -159,7 +159,7 @@ const UserItems = ({items, loading}) => {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
-          <UserModal action={action} toggle={toggle} setToggle={setToggle} item={item}/>
+          <UserModal action={action} toggle={toggle} setToggle={setToggle} item={item} notif={notif} refreshHandle={refreshHandle}/>
         </Table>
     )
 }

@@ -6,11 +6,12 @@ import {
   Checkbox,
   Image,
 } from "semantic-ui-react";
+import LoaderCss from "../loader/LoaderCss";
 import VehiculeModal from "../modal/VehiculeModal";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 
-const VehiculeItems = ({items, loading}) => {
+const VehiculeItems = ({items, loading, notif, refreshHandle, listCategory}) => {
 
   const { authTokens } = useAuth();
   const[deleteList,setDeleteList] = useState([]);
@@ -35,17 +36,6 @@ const VehiculeItems = ({items, loading}) => {
     
       const [item,setItem] = useState(startItem);
 
-      const [listCategory,setListCategory] = useState([]);
-
-      useEffect(() => {
-        async function fetchData() {
-          const result = await axios.get(`http://127.0.0.1:8000/api/categorie`);
-          
-          setListCategory(result.data.data);
-          console.log(result.data.data);
-        }
-        fetchData();
-      }, []);
 
 
       const clickHandle = (event, data) =>{
@@ -75,7 +65,7 @@ const VehiculeItems = ({items, loading}) => {
 
         if(deleteList.length === 0){
           
-          alert('sir tl3ab');
+          notif('selectionner les elements à supprimer','error');
         }
         else{
 
@@ -90,8 +80,8 @@ const VehiculeItems = ({items, loading}) => {
           })
             .then((res) => {
               console.log(res.data);
-      
-              alert('done');
+              refreshHandle('delete',deleteList);
+              notif('la suppression est réussie','success');
       
             })
             .catch((err) => {
@@ -101,7 +91,11 @@ const VehiculeItems = ({items, loading}) => {
       }
 
       if(loading){
-        return 'loading '
+        return (
+          <div style={{margin:'0 auto',width:'100%'}}>
+            <LoaderCss />
+          </div>
+        );
     }
 
     return (
@@ -181,7 +175,7 @@ const VehiculeItems = ({items, loading}) => {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
-          <VehiculeModal action={action} toggle={toggle} setToggle={setToggle} item={item} listCategory={listCategory} />
+          <VehiculeModal action={action} toggle={toggle} setToggle={setToggle} item={item} listCategory={listCategory} notif={notif} refreshHandle={refreshHandle}/>
         </Table>
     )
 }

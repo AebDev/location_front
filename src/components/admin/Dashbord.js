@@ -16,6 +16,8 @@ import ReservationDashboard from "./ReservationDashboard";
 import VehiculeDashboard from "./VehiculeDashboard";
 import HomeDashboard from "./HomeDashboard";
 
+import { ToastProvider, useToasts } from 'react-toast-notifications'
+
 function Dashbord() {
   const [activeItem, setActiveItem] = useState("Dashboard");
   const [activeIcon, setActiveIcon] = useState('home');
@@ -47,10 +49,10 @@ function Dashbord() {
   };
 
   return (
-    <Container fluid style={{ marginTop: "5em", height: "100vh !important" }}>
+    <Container fluid style={{ marginTop: "5em",height: "100vh !important" }}>
       <Grid columns={1} style={{ height: "100vh"}}>
         <Grid.Column style={{padding: '0rem'}}>
-          <Sidebar.Pushable as={Segment} style={{width:'100%',}}>
+          <Sidebar.Pushable as={Segment} style={{width:'100%'}}>
             <LeftMenu itemSelected = {window.location.pathname.split('/')[2]}/>
 
             <Sidebar.Pusher style={{ height: '100vh', overflowY : 'scroll', backgroundColor : '#f7f7f7'}}>>
@@ -63,9 +65,11 @@ function Dashbord() {
                 <Breadcrumb.Section active>{window.location.pathname.split('/')[2]}</Breadcrumb.Section>
               </Breadcrumb>
               
+              <ToastProvider>
               {switchRender(window.location.pathname)}
+              </ToastProvider>
 
-            </Sidebar.Pusher>
+          </Sidebar.Pusher>
           </Sidebar.Pushable>
         </Grid.Column>
       </Grid>

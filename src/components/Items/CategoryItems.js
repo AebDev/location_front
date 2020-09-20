@@ -5,12 +5,12 @@ import {
   Button,
   Checkbox,
 } from "semantic-ui-react";
-
+import LoaderCss from "../loader/LoaderCss";
 import CategoryModal from "../modal/CategoryModal";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 
-const CategoryItems = ({items, loading}) => {
+const CategoryItems = ({items, loading, notif, refreshHandle}) => {
 
   const { authTokens } = useAuth();
   const[deleteList,setDeleteList] = useState([]);
@@ -54,8 +54,8 @@ const CategoryItems = ({items, loading}) => {
       const deleteHandle = () =>{
 
         if(deleteList.length === 0){
-          
-          alert('sir tl3ab');
+        
+          notif('selectionner les elements à supprimer','error');
         }
         else{
 
@@ -70,9 +70,9 @@ const CategoryItems = ({items, loading}) => {
           })
             .then((res) => {
               console.log(res.data);
-      
-              alert('done');
-      
+              refreshHandle('delete',deleteList);
+              notif('la suppression est réussie','success');
+
             })
             .catch((err) => {
               console.log(err);
@@ -81,9 +81,14 @@ const CategoryItems = ({items, loading}) => {
       }
 
       if(loading){
-        return 'loading '
+        return (
+          <div style={{margin:'0 auto',width:'100%'}}>
+            <LoaderCss />
+          </div>
+        );
     }
 
+    
     return (
         <Table compact celled definition>
           <Table.Header >
@@ -144,7 +149,7 @@ const CategoryItems = ({items, loading}) => {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
-          <CategoryModal action={action} toggle={toggle} setToggle={setToggle} item={item}/>
+          <CategoryModal action={action} toggle={toggle} setToggle={setToggle} item={item} notif={notif} items={items} refreshHandle={refreshHandle} />
         </Table>
     )
 }

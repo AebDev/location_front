@@ -79,6 +79,7 @@ function VehiculeModal(props) {
   const postData = () => {
     let url;
     let methode;
+    let msg;
 
     const formData = new FormData();
     formData.set("matricule", matricule );
@@ -99,9 +100,11 @@ function VehiculeModal(props) {
       
       url = "http://127.0.0.1:8000/api/vehicule";
       methode = "POST";
+      msg = "l' ajoute est réussie";
     } else {
       url = "http://127.0.0.1:8000/api/vehicule/" + id;
       methode = "POST";
+      msg = 'la modification est réussie';
     }
 
     console.log(formData);
@@ -117,14 +120,15 @@ function VehiculeModal(props) {
     })
       .then((res) => {
         console.log(res.data);
-
-        alert("done");
+        props.refreshHandle(props.action,res.data);
+        props.notif(msg,'success');
         closeModal();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  console.log(listCategory);
   return (
     <Modal
       onClose={() => closeModal()}
@@ -260,38 +264,36 @@ function VehiculeModal(props) {
             <Header as="h4" textAlign="left" color="grey">
             boite_vitesse
             </Header>
-            <Form.Input
-              fluid
-              icon="info"
-              iconPosition="left"
-              placeholder="boite_vitesse"
-              name="boite_vitesse"
-              required
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={boite_vitesse}
-              onChange={(e) => {
-                setBoite(e.target.value);
-              }}
-            />
+            <Dropdown
+            fluid
+            placeholder="boite_vitesse"
+            value={boite_vitesse} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'automatic',value:'auto'},{key:1,text:'manuel',value:'manu'}]} 
+            onChange={(e,selected) => {
+              setBoite(selected.value);
+            }}/>
           </Grid.Column>
           <Grid.Column>
             <Header as="h4" textAlign="left" color="grey">
             carburant
             </Header>
-            <Form.Input
-              fluid
-              icon="home"
-              iconPosition="left"
-              placeholder="carburant"
-              name="carburant"
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={carburant}
-              onChange={(e) => {
-                setCarburant(e.target.value);
-              }}
-            />
+            <Dropdown
+            fluid
+            placeholder="carburant"
+            value={carburant} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'diesel',value:'diesel'},{key:1,text:'essence',value:'essence'}]} 
+            onChange={(e,selected) => {
+              setCarburant(selected.value);
+            }}/>
+            
           </Grid.Column>
           <Grid.Column>
             <Header as="h4" textAlign="left" color="grey">
@@ -370,19 +372,19 @@ function VehiculeModal(props) {
             <Header as="h4" textAlign="left" color="grey">
             climatisation
             </Header>
-            <Form.Input
-              fluid
-              icon="zip"
-              iconPosition="left"
-              placeholder="climatisation"
-              name="climatisation"
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={climatisation}
-              onChange={(e) => {
-                setClimatisation(e.target.value);
-              }}
-            />
+            <Dropdown
+            fluid
+            placeholder="climatisation"
+            value={climatisation} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'sans',value:'0'},{key:1,text:'avec',value:'1'}]} 
+            onChange={(e,selected) => {
+              setClimatisation(selected.value);
+            }}/>
+            
           </Grid.Column>
         </Grid>
       </Modal.Content>

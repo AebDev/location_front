@@ -9,7 +9,7 @@ import { DateInput } from 'semantic-ui-calendar-react';
 function MainHome(props) {
 
   const today = new Date();
-  const [startDate, setStartDate] = useState(today.getDate()+'-'+today.getMonth()+'-'+today.getFullYear());
+  const [startDate, setStartDate] = useState(today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate());
   const [endDate, setEndDate] = useState(startDate);
   const [minDate, setMinDate] = useState(startDate);
   const [age, setAge] = useState('');
@@ -34,7 +34,7 @@ function MainHome(props) {
             <Header as="h4" textAlign='left' color="grey">DATE DE PRISE EN CHARGE</Header>
             <DateInput
           name="startDate"
-          dateFormat='DD-MM-YYYY'
+          dateFormat='YYYY-MM-DD'
           minDate = {startDate}
           placeholder="Date Time"
           value={startDate}
@@ -46,7 +46,7 @@ function MainHome(props) {
             <Header as="h4" textAlign='left' color="grey">DATE DE RESTITUTION</Header>
             <DateInput
           name="endDate"
-          dateFormat='DD-MM-YYYY'
+          dateFormat='YYYY-MM-DD'
           minDate = {minDate}
           placeholder="Date Time"
           value={endDate}

@@ -15,8 +15,8 @@ import LeftMenu from "../layouts/LeftMenu";
 import PaginationBar from "../PaginationBar";
 import { useAuth } from "../../context/auth";
 import axios from 'axios';
-import ReservationModal from "../modal/ReservationModal";
 import ReservationItems from "../Items/ReservationItems";
+import { useToasts } from 'react-toast-notifications'
 
 function ReservationDashboard() {
 
@@ -25,7 +25,7 @@ function ReservationDashboard() {
 
   // const [activeItem, setActiveItem] = useState("Dashboard");
 
-  
+  const { addToast } = useToasts();
 
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,11 +61,17 @@ const [item,setItem] = useState(startItem);
   const indexFirst = indexLast - postPerPage;
   const currentItems = listReservation.slice(indexFirst,indexLast);
 
+  const notif = (msg,type) =>{
+    addToast(msg, {
+      appearance: type,
+      autoDismiss: true,
+    })};
+
   return (
     <Segment basic>
       <Grid style={{margin:'0px 150px 0px 50px'}}>
       
-        <ReservationItems items={currentItems} loading={loading}/>
+        <ReservationItems items={currentItems} loading={loading} notif={notif}/>
         <PaginationBar setCurrentPage={setCurrentPage} total={listReservation.length / postPerPage}/>
       </Grid>
     </Segment>

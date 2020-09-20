@@ -72,7 +72,7 @@ function Reservation(props) {
     let dt1 = date1.split("-");
     let dt2 = date2.split("-");
     const dif = Math.floor(
-      (Date.UTC(dt2[2], dt2[1], dt2[0]) - Date.UTC(dt1[2], dt1[1], dt1[0])) /
+      (Date.UTC(dt2[0], dt2[1], dt2[2]) - Date.UTC(dt1[0], dt1[1], dt1[2])) /
         (1000 * 60 * 60 * 24)
     );
 

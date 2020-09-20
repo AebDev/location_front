@@ -61,6 +61,7 @@ function ReservationModal(props) {
   const postData = () => {
     let url;
     let methode;
+    let msg;
 
     const data = {
         'user_id' : user,
@@ -82,11 +83,13 @@ function ReservationModal(props) {
 
         url = "http://127.0.0.1:8000/api/location";
         methode='POST';
+        msg = "l' ajoute est réussie";
 
     }else{
 
         url = "http://127.0.0.1:8000/api/location/"+id;
         methode='PUT';
+        msg = 'la modification est réussie';
     }
 
     console.log(data);
@@ -103,7 +106,7 @@ function ReservationModal(props) {
       .then((res) => {
         console.log(res.data);
 
-        alert('done');
+        props.notif(msg,'success');
         closeModal();
 
       })
@@ -181,7 +184,7 @@ function ReservationModal(props) {
           <Header as="h4" textAlign='left' color="grey">date_debut </Header>
             <DateInput
               name="date_debut"
-              dateFormat="DD-MM-YYYY"
+              dateFormat="YYYY-MM-DD"
               minDate=""
               placeholder="date_debut"
               iconPosition="left"
@@ -196,7 +199,7 @@ function ReservationModal(props) {
           <Header as="h4" textAlign='left' color="grey">date_fin</Header>
             <DateInput
               name="date_fin"
-              dateFormat="DD-MM-YYYY"
+              dateFormat="YYYY-MM-DD"
               minDate=""
               placeholder="date_fin"
               iconPosition="left"

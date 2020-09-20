@@ -4,7 +4,8 @@ import "semantic-ui-css/semantic.min.css";
 import { Button, Form, Grid, Header, Segment, Label, Container, Image, Icon, Popup } from "semantic-ui-react";
 import FilterCars from './FilterCars';
 import axios from 'axios';
-import { ReservContext } from '../../context/Reserv'
+import { ReservContext } from '../../context/Reserv';
+import PaginationBar from "../PaginationBar";
 
 
 const specs = [
@@ -41,13 +42,17 @@ function ListCars(props) {
 
 
   const [listCars, setListCars] = useState([]);
+  const [FiltredListCars, setFiltredListCars] = useState([]);
+  const [categorie,setCategorie] = useState([]);
+  const [marque,setMarque] = useState([]);
 
   const reserv = useContext(ReservContext);
   // const [startDate, setStartDate] = useState(props.match.params.start);
   // const [endDate, setEndDate] = useState(props.match.params.end);
   // const [age, setAge] = useState(props.match.params.age);
 
-  console.log(props.match.params.age);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(9);
 
   useEffect(() => {
     async function fetchData() {
@@ -56,12 +61,46 @@ function ListCars(props) {
       
       // setListCars(result.data.data);
       setListCars(result.data.data.filter((i) => i.categories));
+      setFiltredListCars(result.data.data.filter((i) => i.categories));
       console.log(result.data.data);
     }
     fetchData();
-
     reserv.setResInfo(props.match.params);
   }, []);
+
+  const filterCarHandle = (data) =>{
+
+        let cat = categorie;
+        let mar = marque;
+        if(data.name == 'categorie'){ 
+            data.checked ? cat.push(data.value) : cat = cat.filter((item)=> item != data.value );
+            setCategorie(cat);
+        }
+        
+        if(data.name == 'marque'){
+            data.checked ? mar.push(data.value) : mar = mar.filter((item)=> item != data.value );
+            setMarque(mar);
+        }
+
+    if((!cat.length)&&(!mar.length)){
+      setFiltredListCars(listCars);
+    }else{
+      let res = listCars;
+      if(cat.length){
+        res = listCars;
+        res = res.filter(f => cat.some(item => item == f.categories.nom_categorie));
+      }
+      if(mar.length){
+        res = res.filter(f => mar.some(item => item == f.marque));
+      }
+      setFiltredListCars(res);
+    }
+  }
+
+
+  const indexLast = currentPage * postPerPage;
+  const indexFirst = indexLast - postPerPage;
+  const currentItems = FiltredListCars.slice(indexFirst,indexLast);
 
   return (
 
@@ -70,13 +109,14 @@ function ListCars(props) {
       <Form size="large" >
         <Grid style={{ height: "100vh" }} doubling stackable >
 
-          <FilterCars />
+          <FilterCars filterCarHandle={filterCarHandle}/>
 
           <Grid.Column width={12}>
 
             <Grid width={16} columns={3} doubling stackable>
 
-              {listCars.map((car) => (
+              {/* {!currentItems.length ? (<h1>no item found</h1>) : ''} */}
+              {currentItems.map((car) => (
                 
                 <Grid.Column  >
                   
@@ -142,6 +182,7 @@ function ListCars(props) {
 
             </Grid>
           </Grid.Column>
+          <PaginationBar setCurrentPage={setCurrentPage} total={FiltredListCars.length / postPerPage}/>
         </Grid>
       </Form>
     </Container>

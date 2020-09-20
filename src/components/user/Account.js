@@ -52,8 +52,8 @@ function Account() {
       <Grid.Column>
         <Container style={{ height: "80vh", marginTop: "10vh" }}>
           <Header as="h2" textAlign="center">
-            <Icon name="user" color="teal" />
-            <Header.Content>Account</Header.Content>
+            <Icon name="clipboard" color="teal" />
+            <Header.Content>Reservation</Header.Content>
           </Header>
           <Form size="large">
             <Segment stacked style={{ padding: "2rem" }}>
@@ -65,7 +65,7 @@ function Account() {
                   <Grid stackable>
                     <Grid.Column width={4}>
                       <Image
-                        src="https://picsum.photos/200"
+                        src={`http://localhost:8000${item.vehicules.image}`}
                         style={{ width: "100vh" }}
                       />
                     </Grid.Column>

@@ -11,12 +11,12 @@ import {
   Button,
   Checkbox,
 } from "semantic-ui-react";
-
+import LoaderCss from "../loader/LoaderCss";
 import ReservationModal from "../modal/ReservationModal";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 
-const ReservationItems = ({items, loading}) => {
+const ReservationItems = ({items, loading, notif}) => {
 
 
   const { authTokens } = useAuth();
@@ -64,7 +64,7 @@ const ReservationItems = ({items, loading}) => {
 
         if(deleteList.length === 0){
           
-          alert('sir tl3ab');
+          notif('selectionner les elements à supprimer','error');
         }
         else{
 
@@ -80,7 +80,7 @@ const ReservationItems = ({items, loading}) => {
             .then((res) => {
               console.log(res.data);
       
-              alert('done');
+              notif('la suppression est réussie','success');
       
             })
             .catch((err) => {
@@ -90,7 +90,11 @@ const ReservationItems = ({items, loading}) => {
       }
 
       if(loading){
-        return 'loading '
+        return (
+          <div style={{margin:'0 auto',width:'100%'}}>
+            <LoaderCss />
+          </div>
+        );
     }
 
     return (
@@ -153,7 +157,7 @@ const ReservationItems = ({items, loading}) => {
           </Table.HeaderCell>
         </Table.Row>
       </Table.Footer>
-      <ReservationModal action={action} toggle={toggle} setToggle={setToggle} item={item}/>
+      <ReservationModal action={action} toggle={toggle} setToggle={setToggle} item={item} notif={notif}/>
     </Table>
 
     )

@@ -58,6 +58,7 @@ function UserModal(props) {
   const postData = () => {
     let url;
     let methode;
+    let msg;
 
     const data = {
         'nom' : nom,
@@ -80,11 +81,13 @@ function UserModal(props) {
         data.repassword = repassword;
         url = "http://127.0.0.1:8000/api/users";
         methode='POST';
+        msg = "l' ajoute est réussie";
 
     }else{
 
         url = "http://127.0.0.1:8000/api/users/"+id;
         methode='PUT';
+        msg = 'la modification est réussie';
     }
 
     console.log(data);
@@ -100,8 +103,8 @@ function UserModal(props) {
     })
       .then((res) => {
         console.log(res.data);
-
-        alert('done');
+        props.refreshHandle(props.action,res.data);
+        props.notif(msg,'success');
         closeModal();
 
       })
