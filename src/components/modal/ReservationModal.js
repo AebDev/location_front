@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Form, Modal, Header, Icon} from "semantic-ui-react";
+import { Button, Grid, Form, Modal, Header, Icon, Dropdown, Image} from "semantic-ui-react";
 import { DateInput } from "semantic-ui-calendar-react";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
@@ -26,6 +26,8 @@ function ReservationModal(props) {
   const [vol, setVol] = useState("");
   const [compagnie, setCompagnie] = useState("");
 
+  const [listVehicule, setListVehicule] = useState([]);
+  const [listUser, setListUser] = useState([]);
 
   useEffect(() => {
     if (open !== props.toggle) {
@@ -47,6 +49,31 @@ function ReservationModal(props) {
       setProtection(props.item.type_de_protection);
       setVol(props.item.num_de_vol);
       setCompagnie(props.item.compagnie_aerienne);
+
+      let list = []; 
+
+      props.listVehicule.map((item,key)=>(
+        list.push({
+          key : key,
+          text : item.matricule,
+          value : item.id
+        })
+      ));
+
+      setListVehicule(list);
+
+      list = [];
+
+      props.listUser.map((item,key)=>(
+        list.push({
+          key : key,
+          text : item.email,
+          value : item.id
+        })
+      ));
+
+      setListUser(list);
+
     }
   }, [props.toggle]);
 
@@ -75,7 +102,8 @@ function ReservationModal(props) {
         'option_Rehausseur_bebe' : bebe,
         'type_de_protection' : protection,
         'num_de_vol' : vol,
-        'compagnie_aerienne' : compagnie
+        'compagnie_aerienne' : compagnie,
+        'etat' : 'test'
     }
 
 
@@ -105,7 +133,7 @@ function ReservationModal(props) {
     })
       .then((res) => {
         console.log(res.data);
-
+        props.refreshHandle(props.action,res.data);
         props.notif(msg,'success');
         closeModal();
 
@@ -122,13 +150,19 @@ function ReservationModal(props) {
       open={open}
     >
       <Modal.Header>
-        <Icon name='user' />
+        <Icon name='opencart' />
           {props.action == "view" ? 'Afficher reservation' : ''}
           {props.action == "edit" ? 'Modifier reservation' : ''}
           {props.action == "add" ? 'Nouveau reservation' : ''}
       </Modal.Header>
       <Modal.Content image>
+
         <Grid width={16} columns={2} doubling stackable>
+        {props.action == "view" ? (
+            <Grid.Column width={16}>
+              <Image src={`http://localhost:8000${props.item.vehicules.image}`} style={{margin: 'auto'}} size='medium'/>
+            </Grid.Column>
+          ):''}
         {props.action == "add" ? '' :(
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">numero de commande : </Header>
@@ -147,37 +181,35 @@ function ReservationModal(props) {
         )}
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">user : </Header>
-            <Form.Input
-              fluid
-              icon="user"
-              iconPosition="left"
-              placeholder="user"
-              name="user"
-              required
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={user}
-              onChange={(e) => {
-                setUser(e.target.value);
-              }}
-            />
+          <Dropdown
+            fluid
+            placeholder='user' 
+            value={user} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={listUser} 
+            onChange={(e,selected) => {
+              setUser(selected.value);
+            }}/>
+            
           </Grid.Column>
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">vehicule : </Header>
-            <Form.Input
-              fluid
-              icon="mail"
-              iconPosition="left"
-              placeholder="vehicule"
-              name="vehicule"
-              required
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={vehicule}
-              onChange={(e) => {
-                setVehicule(e.target.value);
-              }}
-            />
+          <Dropdown
+            fluid
+            placeholder='vehicule' 
+            value={vehicule} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={listVehicule} 
+            onChange={(e,selected) => {
+              setVehicule(selected.value);
+            }}/>
+            
           </Grid.Column>
 
           <Grid.Column>
@@ -230,86 +262,84 @@ function ReservationModal(props) {
           
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">gps : </Header>
-            <Form.Input
-              fluid
-              icon="info"
-              iconPosition="left"
-              placeholder="gps"
-              name="gps"
-              required
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={gps}
-              onChange={(e) => {
-                setGps(e.target.value);
-              }}
-            />
+          <Dropdown
+            fluid
+            placeholder="gps"
+            value={gps} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'sans',value:'0'},{key:1,text:'avec',value:'1'}]} 
+            onChange={(e,selected) => {
+              setGps(selected.value);
+            }}/>
+            
           </Grid.Column>
           
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">wifi : </Header>
-            <Form.Input
-              fluid
-              icon="home"
-              iconPosition="left"
-              placeholder="wifi"
-              name="wifi"
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={wifi}
-              onChange={(e) => {
-                setWifi(e.target.value);
-              }}
-            />
+          <Dropdown
+            fluid
+            placeholder="wifi"
+            value={wifi} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'sans',value:'0'},{key:1,text:'avec',value:'1'}]} 
+            onChange={(e,selected) => {
+              setWifi(selected.value);
+            }}/>
+            
           </Grid.Column>
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">enfant : </Header>
-            <Form.Input
-              fluid
-              icon="phone"
-              iconPosition="left"
-              placeholder="enfant"
-              name="enfant"
-              required
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={enfant}
-              onChange={(e) => {
-                setEnfant(e.target.value);
-              }}
-            />
+          <Dropdown
+            fluid
+            placeholder="enfant"
+            value={enfant} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'sans',value:'0'},{key:1,text:'avec',value:'1'}]} 
+            onChange={(e,selected) => {
+              setEnfant(selected.value);
+            }}/>
+            
           </Grid.Column>
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">bebe : </Header>
-            <Form.Input
-              fluid
-              icon="map"
-              iconPosition="left"
-              placeholder="bebe"
-              name="bebe"
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={bebe}
-              onChange={(e) => {
-                setBebe(e.target.value);
-              }}
-            />
+          <Dropdown
+            fluid
+            placeholder="bebe"
+            value={bebe} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'sans',value:'0'},{key:1,text:'avec',value:'1'}]} 
+            onChange={(e,selected) => {
+              setBebe(selected.value);
+            }}/>
+            
           </Grid.Column>
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">protection : </Header>
-            <Form.Input
-              fluid
-              icon="map"
-              iconPosition="left"
-              placeholder="protection"
-              name="protection"
-              style={{ opacity: "1" }}
-              disabled={disable}
-              value={protection}
-              onChange={(e) => {
-                setProtection(e.target.value);
-              }}
-            />
+          <Dropdown
+            fluid
+            placeholder="protection"
+            value={protection} 
+            selection 
+            required
+            style={{ opacity: "1" }}
+            disabled={disable}
+            options={[{key:0,text:'Base',value:'1'},{key:1,text:'Standard',value:'2'},{key:2,text:'Premium',value:'3'}]} 
+            onChange={(e,selected) => {
+              setProtection(selected.value);
+            }}/>
+            
           </Grid.Column>
           <Grid.Column>
           <Header as="h4" textAlign='left' color="grey">vol : </Header>

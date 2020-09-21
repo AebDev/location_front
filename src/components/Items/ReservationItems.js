@@ -16,7 +16,7 @@ import ReservationModal from "../modal/ReservationModal";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 
-const ReservationItems = ({items, loading, notif}) => {
+const ReservationItems = ({items, loading, notif, listVehicule, listUser, refreshHandle}) => {
 
 
   const { authTokens } = useAuth();
@@ -79,7 +79,7 @@ const ReservationItems = ({items, loading, notif}) => {
           })
             .then((res) => {
               console.log(res.data);
-      
+              refreshHandle('delete',deleteList);
               notif('la suppression est réussie','success');
       
             })
@@ -157,7 +157,7 @@ const ReservationItems = ({items, loading, notif}) => {
           </Table.HeaderCell>
         </Table.Row>
       </Table.Footer>
-      <ReservationModal action={action} toggle={toggle} setToggle={setToggle} item={item} notif={notif}/>
+      <ReservationModal action={action} toggle={toggle} setToggle={setToggle} item={item} notif={notif} listVehicule={listVehicule} listUser={listUser} refreshHandle={refreshHandle}/>
     </Table>
 
     )

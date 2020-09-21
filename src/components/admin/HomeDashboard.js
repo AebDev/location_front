@@ -68,7 +68,7 @@ function HomeDashboard() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authTokens}`
       }});
-
+      console.log(result.data);
       setStatistic(result.data);
     }
     fetchData();

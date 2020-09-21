@@ -21,6 +21,8 @@ import { useToasts } from 'react-toast-notifications'
 function ReservationDashboard() {
 
   const [listReservation, setListReservation] = useState([]);
+  const [listVehicule, setListVehicule] = useState([]);
+  const [listUser, setListUser] = useState([]);
   const {authTokens} = useAuth();
 
   // const [activeItem, setActiveItem] = useState("Dashboard");
@@ -52,6 +54,30 @@ const [item,setItem] = useState(startItem);
       setLoading(false);
     }
     fetchData();
+
+    async function fetchVehi() {
+      setLoading(true);
+      const result = await axios.get(`http://127.0.0.1:8000/api/vehicules`);
+      
+      setListVehicule(result.data.data);
+      console.log(result.data.data);
+    }
+    fetchVehi();
+
+    async function fetchUser() {
+      setLoading(true);
+      const result = await axios.get(`http://127.0.0.1:8000/api/users`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authTokens}`
+        }
+      });
+      
+      setListUser(result.data.data);
+      console.log(result.data.data);
+    }
+    fetchUser();
+
   }, []);
 
   // const handleItemClick = (e, { name }) => setActiveItem({ name });
@@ -60,6 +86,41 @@ const [item,setItem] = useState(startItem);
   const indexLast = currentPage * postPerPage;
   const indexFirst = indexLast - postPerPage;
   const currentItems = listReservation.slice(indexFirst,indexLast);
+
+  const refreshHandle = (action,value) => {
+
+    if(action == 'add' || action == 'edit'){
+      const v = listVehicule.filter((item) => item.id == value.data.vehicule_id);
+      const u = listUser.filter((item) => item.id == value.data.user_id);
+
+      value.data.vehicules = v[0];
+      value.data.users = u[0];
+    }
+    
+    switch (action) {
+      case 'add':
+        const list = listReservation;
+        list.push(value.data);
+        setListReservation(list);
+        break;
+      case 'edit':
+        const list2 = listReservation.filter((item) => item.id !== value.data.id);
+        list2.push(value.data);
+        setListReservation(list2);
+        break;
+      case 'delete':
+        const list3 = listReservation.filter(
+          function(e) {
+            return this.indexOf(e.id) < 0;
+          },value
+        );
+        setListReservation(list3);
+        break;
+      
+      default:
+        break;
+    }
+  }
 
   const notif = (msg,type) =>{
     addToast(msg, {
@@ -71,7 +132,7 @@ const [item,setItem] = useState(startItem);
     <Segment basic>
       <Grid style={{margin:'0px 150px 0px 50px'}}>
       
-        <ReservationItems items={currentItems} loading={loading} notif={notif}/>
+        <ReservationItems items={currentItems} loading={loading} notif={notif} listVehicule={listVehicule} listUser={listUser} refreshHandle={refreshHandle}/>
         <PaginationBar setCurrentPage={setCurrentPage} total={listReservation.length / postPerPage}/>
       </Grid>
     </Segment>

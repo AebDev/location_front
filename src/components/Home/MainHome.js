@@ -9,11 +9,10 @@ import { DateInput } from 'semantic-ui-calendar-react';
 function MainHome(props) {
 
   const today = new Date();
-  const [startDate, setStartDate] = useState(today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate());
+  const [startDate, setStartDate] = useState(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
   const [endDate, setEndDate] = useState(startDate);
   const [minDate, setMinDate] = useState(startDate);
   const [age, setAge] = useState('');
-
   const onChangeStart = (event, data) => {
     setStartDate(data.value);
     setEndDate(data.value);
